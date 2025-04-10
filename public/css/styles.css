@@ -1,295 +1,279 @@
 /* --- Google Font Import --- */
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
 
-/* --- CSS Variables (for easier theme changes) --- */
+/* --- CSS Variables (Blue & Gray Theme) --- */
 :root {
-    --primary-color: #007bff;
-    --primary-hover-color: #0056b3;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
+    /* Primary Action Colors (Blue) */
+    --primary-color: #007bff;        /* Classic Blue */
+    --primary-hover-color: #0056b3; /* Darker Blue */
+    --primary-gradient: linear-gradient(135deg, #007bff, #0056b3);
+    --primary-color-rgb: 0, 123, 255;
+
+    /* Status Colors (Keep standard for clarity) */
+    --success-color: #28a745;        /* Green */
     --success-hover-color: #218838;
-    --danger-color: #dc3545;
+    --danger-color: #dc3545;         /* Red */
     --danger-hover-color: #c82333;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
+    --warning-color: #ffc107;        /* Yellow */
+    --info-color: #17a2b8;           /* Teal/Cyan */
     --info-hover-color: #117a8b;
-    --light-gray: #f8f9fa;
-    --medium-gray: #dee2e6;
-    --dark-gray: #343a40;
-    --text-color: #212529;
+
+    /* NEW THEME COLORS (Blue & Gray) */
+    --theme-dark-gray: #343a40;      /* Dark Gray/Charcoal */
+    --theme-medium-gray: #6c757d;     /* Medium Gray */
+    --theme-light-gray: #e9ecef;      /* Light Gray */
+    --theme-very-light-gray: #f8f9fa; /* Very Light Gray / Off-White */
+    --theme-white-rgb: 255, 255, 255;
+
+    /* Backgrounds */
+    --body-bg: var(--theme-dark-gray); /* Dark Gray outer background */
+    --container-bg-alpha: 0.95;        /* High opacity for readability */
+    --container-bg: rgba(var(--theme-white-rgb), var(--container-bg-alpha)); /* Slightly translucent White */
+    --nav-bg: var(--theme-light-gray); /* Solid Light Gray for Nav */
+
+    /* Text & Greys */
+    --text-color-on-dark: #ced4da;    /* Light Gray text for body */
+    --text-color-on-light: #212529;   /* Dark text for container */
+    --heading-color: #212529;        /* Dark headings in container */
+    --secondary-color: var(--theme-medium-gray); /* Medium gray for less important text */
+
+    /* Links */
     --link-color: var(--primary-color);
-    --body-bg: #f4f7f6; /* Slightly off-white background */
-    --container-bg: #ffffff;
-    --border-color: var(--medium-gray);
-    --border-radius: 0.3rem;
-    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    --link-hover-color: var(--primary-hover-color);
+
+    /* Borders & Accents */
+    --border-color: #dee2e6;         /* Light-Medium gray border */
+    --hr-color: rgba(255, 255, 255, 0.1); /* Light hr on dark bg */
+    --table-header-bg: var(--theme-light-gray); /* Match nav */
+    --table-stripe-bg: rgba(0, 0, 0, 0.03); /* Subtle dark stripe on light container */
+    --table-hover-bg: rgba(var(--primary-color-rgb), 0.08); /* Subtle blue hover */
+    --focus-shadow-color: rgba(var(--primary-color-rgb), 0.25);
+    --list-item-bg: #ffffff; /* Solid white list items for clarity */
+    --list-item-hover-bg: var(--theme-very-light-gray);
+
+    /* Other Defaults */
+    --border-radius: 0.4rem; /* Slightly sharper radius */
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    --box-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.18);
     --font-family-base: 'Nunito Sans', sans-serif;
+    --transition-speed: 0.25s; /* Slightly faster transitions */
+    --transition-easing: ease-in-out;
 }
 
 /* --- Global Styles & Resets --- */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--font-family-base);
     font-size: 1rem;
     line-height: 1.6;
-    color: var(--text-color);
-    background-color: var(--body-bg);
-    margin: 0;
-    padding: 0;
+    color: var(--text-color-on-dark); /* Light gray default text */
+    background-color: var(--body-bg); /* Dark gray background */
+    margin: 0; padding: 0; min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* --- Container --- */
 .container {
-    max-width: 1140px; /* Wider container */
-    margin: 2rem auto; /* More vertical spacing */
-    padding: 2rem; /* More internal padding */
-    background-color: var(--container-bg);
+    max-width: 1140px;
+    margin: 2.5rem auto; /* Slightly less margin */
+    padding: 2rem 2.5rem; /* Adjust padding */
+    background-color: var(--container-bg); /* Translucent White */
+    color: var(--text-color-on-light); /* Dark text inside container */
     border-radius: var(--border-radius);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
+    backdrop-filter: blur( 3px ); /* Subtle blur */
+    -webkit-backdrop-filter: blur( 3px );
+    border: 1px solid var(--border-color); /* Add subtle border */
+    transition: transform var(--transition-speed) var(--transition-easing), box-shadow var(--transition-speed) var(--transition-easing);
+    animation: fadeInSlideUp 0.5s var(--transition-easing) forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* --- Typography --- */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--dark-gray);
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-weight: 700;
+    color: var(--heading-color); /* Dark headings inside container */
+    margin-top: 0; margin-bottom: 0.8rem; font-weight: 700;
+    /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); */ /* Remove text shadow for cleaner look */
 }
 
-h1 { font-size: 2.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 0.5rem;} /* Style item titles */
-
-p {
-    margin-top: 0;
-    margin-bottom: 1rem;
+h1 {
+    font-size: 2.2rem;
+    border-bottom: 2px solid var(--primary-color); /* Blue underline */
+    padding-bottom: 0.6rem; margin-bottom: 1.8rem;
+    color: var(--primary-color); /* Make H1 blue */
 }
+h2 { font-size: 1.7rem; margin-bottom: 1rem; }
+h3 { font-size: 1.4rem; color: var(--heading-color); margin-bottom: 0.6rem; }
+
+p { margin-top: 0; margin-bottom: 1.1rem; color: var(--text-color-on-light); }
 
 a {
-    color: var(--link-color);
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
+    color: var(--link-color); text-decoration: none; font-weight: 600;
+    position: relative; transition: color var(--transition-speed) var(--transition-easing);
 }
 
-a:hover {
-    color: var(--primary-hover-color);
-    text-decoration: underline;
+a:not(nav a)::after { /* Underline for non-nav links */
+    content: ''; position: absolute; width: 0; height: 2px; bottom: -3px; left: 0;
+    background-color: var(--link-hover-color);
+    transition: width var(--transition-speed) var(--transition-easing);
 }
+a:not(nav a):hover { color: var(--link-hover-color); text-decoration: none; }
+a:not(nav a):hover::after { width: 100%; }
 
-small {
-    font-size: 0.85em;
-    color: var(--secondary-color);
-}
+small { font-size: 0.875em; color: var(--secondary-color); }
 
 hr {
-    border: 0;
-    border-top: 1px solid var(--border-color);
-    margin: 1.5rem 0;
+    border: 0; height: 1px;
+    background-image: linear-gradient(to right, transparent, var(--hr-color), transparent);
+    margin: 2rem 0;
 }
 
 /* --- Navigation --- */
 nav {
-    background-color: var(--light-gray);
-    padding: 1rem 0;
-    margin-bottom: 2rem;
-    border-radius: var(--border-radius);
-    text-align: center;
-    border: 1px solid var(--border-color);
+    background-color: var(--nav-bg); /* Light Gray Background */
+    padding: 0.8rem 1rem; margin-bottom: 2rem; text-align: center;
+    border-radius: var(--border-radius); box-shadow: var(--box-shadow);
 }
 
 nav a {
-    /* Reduce the horizontal margin from 1rem */
-    margin: 0 0.5rem; /* Example: Reduced to half */
-    font-weight: 600;
-    text-decoration: none;
-    padding: 0.5rem 0.75rem; /* Keep padding for now */
-    border-radius: var(--border-radius);
-    transition: background-color 0.2s ease, color 0.2s ease;
-    /* Add this if not already present from previous attempts */
-    display: inline-block;
-    white-space: nowrap; /* Prevent text WITHIN a link from wrapping */
+    display: inline-block; font-weight: 600; text-decoration: none;
+    color: var(--text-color-on-light); /* Dark text */
+    background-color: #ffffff; /* White background */
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1.1rem; border-radius: 50px; /* Pill shape */
+    margin: 0.3rem 0.4rem;
+    transition: all var(--transition-speed) var(--transition-easing);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08); white-space: nowrap;
 }
 
 nav a:hover {
-    background-color: var(--medium-gray);
-    color: var(--primary-hover-color);
-    text-decoration: none;
+    background-color: var(--primary-color); /* Blue background */
+    color: #fff; /* White text */
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(var(--primary-color-rgb), 0.3);
+    transform: translateY(-2px); text-decoration: none;
+}
+
+nav a:active {
+    transform: translateY(0px);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-hover-color);
 }
 
 /* --- Forms --- */
-form div {
-    margin-bottom: 1.25rem;
-}
-
+form div { margin-bottom: 1.3rem; }
 form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
+    display: block; margin-bottom: 0.5rem; font-weight: 600;
+    color: var(--secondary-color); font-size: 0.9em;
+    text-transform: uppercase; letter-spacing: 0.5px;
 }
-
-form input[type="text"],
-form input[type="date"],
-form input[type="email"],
-form input[type="tel"],
-form textarea,
-form select {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-family: inherit;
-    line-height: 1.5;
-    color: var(--text-color);
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid var(--border-color);
+form input[type="text"], form input[type="date"], form input[type="email"],
+form input[type="tel"], form textarea, form select {
+    display: block; width: 100%; padding: 0.75rem 1rem; font-size: 1rem;
+    font-family: inherit; line-height: 1.5; color: var(--text-color-on-light);
+    background-color: #ffffff; /* Solid white background */
+    background-clip: padding-box; border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color var(--transition-speed) var(--transition-easing), box-shadow var(--transition-speed) var(--transition-easing);
 }
-
-form input[type="text"]:focus,
-form input[type="date"]:focus,
-form input[type="email"]:focus,
-form input[type="tel"]:focus,
-form textarea:focus,
-form select:focus {
-    color: var(--text-color);
-    background-color: #fff;
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+form input::placeholder, form textarea::placeholder {
+    color: var(--secondary-color); opacity: 0.8;
 }
-
-form textarea {
-    min-height: 120px;
-    resize: vertical;
+form input:focus, form textarea:focus, form select:focus {
+    color: var(--text-color-on-light); background-color: #fff;
+    border-color: var(--primary-color); /* Blue focus border */
+    outline: 0; box-shadow: 0 0 0 0.2rem var(--focus-shadow-color);
 }
-
-form small { /* Help text below inputs */
-    display: block;
-    margin-top: 0.3rem;
-    font-size: 0.875em;
-    color: var(--secondary-color);
-}
+form textarea { min-height: 120px; resize: vertical; }
+form small { display: block; margin-top: 0.3rem; font-size: 0.875em; color: var(--secondary-color); }
 
 /* --- Buttons --- */
-/* Base button style */
-button, .button-link { /* Added .button-link for potential <a> styled as button */
-    display: inline-block;
-    font-family: inherit;
-    font-weight: 600;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: 0.75rem 1.25rem; /* Slightly larger padding */
-    font-size: 1rem;
-    border-radius: var(--border-radius);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    text-decoration: none; /* For .button-link */
+button, .button-link {
+    display: inline-block; font-family: inherit; font-weight: 600;
+    text-align: center; vertical-align: middle; cursor: pointer; user-select: none;
+    background-color: transparent; border: 1px solid transparent;
+    padding: 0.75rem 1.3rem; font-size: 1rem; border-radius: var(--border-radius);
+    transition: all var(--transition-speed) var(--transition-easing);
+    text-decoration: none; position: relative; top: 0;
 }
+button:hover, .button-link:hover { transform: translateY(-2px); box-shadow: var(--box-shadow-hover); }
+button:active, .button-link:active { transform: translateY(0px); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); }
+form button { border: none; }
 
-/* Prevent double borders on form buttons */
-form button {
-    border: none;
-}
-
-/* Primary Button (Submit Forms) */
+/* Primary Submit Button (Blue) */
 form button[type="submit"] {
-    color: #fff;
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    color: #fff; background-image: var(--primary-gradient); background-size: 150% auto;
+    border: none; box-shadow: 0 3px 8px rgba(var(--primary-color-rgb), 0.3);
 }
-form button[type="submit"]:hover {
-    color: #fff;
-    background-color: var(--primary-hover-color);
-    border-color: var(--primary-hover-color);
-}
+form button[type="submit"]:hover { color: #fff; background-position: right center; }
 
-/* Specific Action Buttons */
+/* Other Action Buttons (Keep Green/Red/etc for clarity) */
 .claim-button {
-    color: #fff;
-    background-color: var(--success-color);
-    border-color: var(--success-color);
-    padding: 0.5rem 1rem; /* Smaller padding for inline buttons */
-    font-size: 0.9em;
+    color: #fff; background-color: var(--success-color); border-color: var(--success-color);
+    padding: 0.5rem 1rem; font-size: 0.9em; box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
 }
-.claim-button:hover {
-    color: #fff;
-    background-color: var(--success-hover-color);
-    border-color: var(--success-hover-color);
-}
+.claim-button:hover { color: #fff; background-color: var(--success-hover-color); border-color: var(--success-hover-color); }
 
-/* Admin Buttons */
 .admin-approve-btn, .admin-reject-btn, .admin-release-btn {
-    color: #fff;
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 0.2rem;
-    margin: 0.15rem;
-    border: none;
+    color: #fff; padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 0.25rem;
+    margin: 0.15rem; border: none; cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-easing);
 }
+.admin-approve-btn:hover, .admin-reject-btn:hover, .admin-release-btn:hover { transform: translateY(-1px) scale(1.03); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+.admin-approve-btn:active, .admin-reject-btn:active, .admin-release-btn:active { transform: translateY(0); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15); }
 
 .admin-approve-btn { background-color: var(--success-color); }
 .admin-approve-btn:hover { background-color: var(--success-hover-color); }
-
 .admin-reject-btn { background-color: var(--danger-color); }
 .admin-reject-btn:hover { background-color: var(--danger-hover-color); }
-
 .admin-release-btn { background-color: var(--info-color); }
 .admin-release-btn:hover { background-color: var(--info-hover-color); }
 
 /* --- Item List --- */
-.item-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 1.5rem;
-}
-
+.item-list { list-style: none; padding: 0; margin-top: 1.5rem; }
 .item-list li {
-    background-color: #fff;
+    background-color: var(--list-item-bg); /* Solid White */
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    margin-bottom: 1.5rem;
-    padding: 1.5rem; /* More padding inside list items */
-    box-shadow: var(--box-shadow);
-    transition: box-shadow 0.2s ease-in-out;
+    border-left: 4px solid var(--primary-color); /* Blue accent */
+    border-radius: var(--border-radius); margin-bottom: 1.2rem; padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    transition: all var(--transition-speed) var(--transition-easing);
+    position: relative; overflow: hidden;
 }
-
 .item-list li:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px) scale(1.005);
+    box-shadow: var(--box-shadow);
+    border-left-color: var(--primary-hover-color);
+    background-color: var(--list-item-hover-bg);
 }
+.item-list li h3 { margin-top: 0; margin-bottom: 0.75rem; color: var(--primary-color); font-weight: 700; font-size: 1.3rem; } /* Blue item title */
+.item-list p { margin-bottom: 0.5rem; color: var(--text-color-on-light); font-size: 0.95em; }
+.item-list p strong { color: var(--heading-color); min-width: 90px; display: inline-block; margin-right: 0.5rem; font-weight: 600; }
 
-.item-list li h3 { /* Item title styling */
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-}
-
-.item-list p {
-    margin-bottom: 0.5rem; /* Tighter spacing for details */
-    color: #555; /* Slightly lighter text for details */
-}
-
-.item-list p strong {
-    color: var(--dark-gray);
-    min-width: 120px; /* Align labels somewhat */
-    display: inline-block;
-}
-
-/* Status indicators */
+/* Status Indicators (keep icons/colors standard) */
+[class^="status-"]::before { content: '●'; display: inline-block; margin-right: 0.5em; font-size: 0.9em; }
+.status-available::before { content: '✓'; color: var(--success-color);}
+.status-reported::before { content: '⚠'; color: #fd7e14; } /* Orange */
+.status-claimed::before, .status-matched::before, .status-returned::before { content: '→'; color: var(--primary-color); }
+.status-claimpending::before { content: '…'; color: var(--info-color); font-weight: bold;} /* Use info color for pending */
+.status-rejected::before { content: '✗'; color: var(--danger-color); }
+.status-holding::before { content: '⏳'; color: var(--info-color); } /* Info/Teal */
+.status-released::before { content: '↩'; color: var(--secondary-color); }
+.status-unknown::before { content: '?'; color: var(--secondary-color); }
+/* Status Text Colors */
 .status-available { color: var(--success-color); font-weight: 600; }
-.status-reported { color: #fd7e14; font-weight: 600; } /* Orange */
+.status-reported { color: #fd7e14; font-weight: 600; }
 .status-claimed, .status-matched, .status-returned { color: var(--primary-color); font-weight: 600; }
-.status-claimpending { color: #6f42c1; font-weight: 600; } /* Purple */
-.status-rejected { color: var(--danger-color); }
+.status-claimpending { color: var(--info-color); font-weight: 600; } /* Info/Teal */
+.status-rejected { color: var(--danger-color); font-weight: 600; }
 .status-holding { color: var(--info-color); font-weight: 600; }
 .status-released { color: var(--secondary-color); font-weight: 600; }
 .status-unknown { color: var(--secondary-color); font-style: italic; }
@@ -297,71 +281,57 @@ form button[type="submit"]:hover {
 
 /* --- Tables (for Admin pages) --- */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    background-color: #fff;
-    box-shadow: var(--box-shadow);
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 1.5rem 0; background-color: #ffffff; /* Solid white table */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-radius: var(--border-radius);
+    overflow: hidden; border: 1px solid var(--border-color);
 }
-
 th, td {
-    border: 1px solid var(--border-color);
-    padding: 0.75rem 1rem; /* Consistent padding */
-    text-align: left;
-    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    padding: 0.8rem 1rem; text-align: left; vertical-align: middle;
+    transition: background-color var(--transition-speed) var(--transition-easing);
+    color: var(--text-color-on-light); /* Dark text in cells */
 }
+th:last-child, td:last-child { border-right: none; }
+thead th {
+    background-color: var(--table-header-bg); /* Light Gray Header */
+    font-weight: 700; white-space: nowrap; color: var(--heading-color);
+    text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.5px;
+    border-top: none; border-bottom-width: 2px; border-color: var(--border-color);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(odd) td { background-color: var(--table-stripe-bg); }
+tbody tr:hover td { background-color: var(--table-hover-bg); }
 
-th {
-    background-color: var(--light-gray);
-    font-weight: 700;
-    white-space: nowrap; /* Prevent headers wrapping */
-}
+form.inline-form { display: inline-block; margin: 0 2px; padding: 0; vertical-align: middle; }
+form.inline-form button { margin: 0; }
 
-tbody tr:nth-child(odd) {
-    background-color: rgba(0, 0, 0, 0.02); /* Subtle striping */
-}
-
-tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05); /* Subtle hover */
-}
-
-/* Inline forms within tables */
-form.inline-form {
-    display: inline;
-    margin: 0 2px;
-}
 
 /* --- Alerts --- */
 .alert {
-    position: relative;
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid transparent;
-    border-radius: var(--border-radius);
+    position: relative; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    border: 1px solid transparent; border-left-width: 4px;
+    border-radius: var(--border-radius); display: flex; align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-.alert-success {
-    color: #0f5132;
-    background-color: #d1e7dd;
-    border-color: #badbcc;
-}
-.alert-danger {
-    color: #842029;
-    background-color: #f8d7da;
-    border-color: #f5c2c7;
-}
-.alert-warning {
-    color: #664d03;
-    background-color: #fff3cd;
-    border-color: #ffecb5;
-}
+.alert::before { display: inline-block; font-size: 1.1em; margin-right: 0.7rem; font-weight: bold; }
+.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; border-left-color: var(--success-color); }
+.alert-success::before { content: '✓'; color: var(--success-color); }
+.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; border-left-color: var(--danger-color); }
+.alert-danger::before { content: '✗'; color: var(--danger-color); }
+.alert-warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; border-left-color: var(--warning-color); }
+.alert-warning::before { content: '⚠'; color: var(--warning-color); }
+.alert-info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; border-left-color: var(--info-color); }
+.alert-info::before { content: 'ℹ'; color: var(--info-color); }
 
 /* --- Footer --- */
 footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
-    text-align: center;
-    color: var(--secondary-color);
-    font-size: 0.9em;
+    margin-top: 3rem; padding: 1.5rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.631); /* Light border on dark bg */
+    text-align: center; color: var(--text-color-on-dark); /* Light text */
+    font-size: 0.9em; background-color: white; /* Match body background */
+    position: relative; z-index: 1;
 }
+footer a { color: var(--primary-color); font-weight: 500; } /* Blue links */
+footer a:hover { color: var(--primary-hover-color); }
