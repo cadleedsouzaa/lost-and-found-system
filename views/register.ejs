@@ -1,0 +1,38 @@
+<%- include('partials/header', { title: 'Register' }) %>
+
+<%# Display error message if passed from the route %>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<form action="/register" method="POST">
+    <div>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required value="<%= typeof formData !== 'undefined' ? formData.name : '' %>">
+        <%# The 'value' part helps repopulate the form if there was an error %>
+    </div>
+    <div>
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
+    </div>
+     <div>
+        <label for="phone">Phone Number (Optional):</label>
+        <input type="tel" id="phone" name="phone" value="<%= typeof formData !== 'undefined' ? formData.phone : '' %>">
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <small>Please choose a strong password.</small>
+    </div>
+    <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+<hr> <%# Optional separator %>
+
+<p>Already have an account? <a href="/login">Login here</a>.</p>
+
+<%- include('partials/footer') %>

@@ -1,10 +1,15 @@
 // server.js (Full Structure Setup)
 console.log("[SERVER] Starting script...");
+// server.js
+require('dotenv').config(); // Add this near the top
+// ... rest of requires ...
 
 const express = require('express');
 const bodyParser = require('body-parser'); // Add body-parser back
 const path = require('path');             // Add path back
 console.log("[SERVER] Required core modules.");
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 // --- Load DB ---
 let db;
@@ -51,6 +56,32 @@ console.log("[SERVER]  - Static files middleware configured for 'public' folder.
 console.log("[SERVER] Mounting main routes...");
 // Should be near the top, after requires and before routes
 app.use(express.static(path.join(__dirname, 'public')));
+// --- Session Configuration ---
+console.log("[SERVER] Configuring session middleware...");
+app.use(session({
+    store: new FileStore({
+        path: './sessions', // Creates a 'sessions' folder for storing data
+        logFn: function(){} // Suppress session-file-store logging if desired
+    }),
+    secret: 'Thisisthesecretfordbms', // ***** CHANGE THIS SECRET *****
+    resave: false, // Don't save session if unmodified
+    saveUninitialized: false, // Don't create session until something stored
+    cookie: {
+        // secure: process.env.NODE_ENV === 'production', // Use true in production with HTTPS
+        secure: false, // For local development (HTTP)
+        maxAge: 1000 * 60 * 60 * 24 // Example: 1 day expiry
+        // httpOnly: true // Recommended for security (prevents client-side JS access)
+    }
+}));
+console.log("[SERVER] Session middleware configured.");
+
+// Middleware to make session user available in templates
+app.use((req, res, next) => {
+    // This makes 'currentUser' available in all your EJS files
+    res.locals.currentUser = req.session.user;
+    next();
+});
+console.log("[SERVER] Session user middleware added to res.locals.");
 app.use('/', mainRoutes); // Use the routes defined in routes/index.js for the base path '/'
 console.log("[SERVER] Main routes mounted.");
 // --- End Mount Routes ---

@@ -172,7 +172,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- End of Setup Script
 -- --------------------------------------------------
 ----
+ALTER TABLE users
+ADD COLUMN password_hash VARCHAR(255) NULL;
 INSERT INTO users (user_id, name, email) VALUES (2, 'Test User Two', 'test2@example.com');
 -- Insert a basic user row with ID 1 (adjust details if needed)
 -- Make sure password_hash allows NULL if you don't provide one here
 INSERT INTO users (user_id, name, email) VALUES (1, 'Test User One', 'test1@example.com');
+DELETE FROM claim_requests WHERE claim_id = 3;
